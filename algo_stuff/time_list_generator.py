@@ -71,10 +71,9 @@ for i in range(100000):
 		signal_list.append(i)
 
 for t in signal_list:
-	print("%d %f" %(t, signals[t]))
 	time_list.append((t, int(signals[t])))
 
-# time_list.sort(reverse = True)
+time_list.sort(reverse = True)
 
 print(time_list)
 print("len: %d" %len(time_list))
