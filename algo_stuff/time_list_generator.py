@@ -63,13 +63,14 @@ for i in range(100000-d):
 # plt.show()
 
 signals = thresholding_algo(time_series, 30, 4, 1)
+signal_list = []
 time_list = []
 
 for i in range(100000):
 	if signals[i] != test and signals[i] > 0: 
-		time_list.append(i)
+		signal_list.append(i)
 
-for t in time_list:
+for t in signal_list:
 	print("%d %f" %(t, signals[t]))
 	time_list.append((t, int(signals[t])))
 
