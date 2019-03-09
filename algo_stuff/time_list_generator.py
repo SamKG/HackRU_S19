@@ -38,22 +38,22 @@ def running_mean(x, N):
    return (cumsum[N:] - cumsum[:-N])
 
 with open("v392252903.txt","r") as stream:
-	for message in stream:
-		seconds = int(time.mktime(time.strptime(message.split("]")[0][1:], "%H:%M:%S")) + 2208970800)
-		time_series[seconds] += 1
+    for message in stream:
+        seconds = int(time.mktime(time.strptime(message.split("]")[0][1:], "%H:%M:%S")) + 2208970800)
+        time_series[seconds] += 1
 
 for i in range(25000):
-	print('%d: %d' %(i, time_series[i]))
+    print('%d: %d' %(i, time_series[i]))
 
 # 14303
 d = 30;
 moving_avg = [0]*(100000-d)
 for i in range(d):
-	moving_avg[0] += time_series[i]
+    moving_avg[0] += time_series[i]
 for i in range(1,25000-d):
-	moving_avg[i] = moving_avg[i-1] + time_series[i+d-1] - time_series[i-1]
+    moving_avg[i] = moving_avg[i-1] + time_series[i+d-1] - time_series[i-1]
 for i in range(100000-d):
-	moving_avg[i] /= d
+    moving_avg[i] /= d
 
 
 # plt.plot(moving_avg[10000:20000])
@@ -67,11 +67,11 @@ signal_list = []
 time_list = []
 
 for i in range(100000):
-	if signals[i] != test and signals[i] > 0: 
-		signal_list.append(i)
+    if signals[i] != test and signals[i] > 0: 
+        signal_list.append(i)
 
 for t in signal_list:
-	time_list.append((t, int(signals[t])))
+    time_list.append((t, int(signals[t])))
 
 time_list.sort(key=operator.itemgetter(1), reverse = True)
 time_list = time_list[:20]
