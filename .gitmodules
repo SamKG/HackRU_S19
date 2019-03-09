@@ -1,0 +1,3 @@
+[submodule "twitchfreq_server/twitchfreq_server/lib/Twitch-Chat-Downloader"]
+	path = twitchfreq_server/twitchfreq_server/lib/Twitch-Chat-Downloader
+	url = https://github.com/PetterKraabol/Twitch-Chat-Downloader
