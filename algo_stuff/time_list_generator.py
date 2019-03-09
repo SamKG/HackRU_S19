@@ -44,7 +44,7 @@ def running_mean(x, N):
 # returns a vector of pairs of (start, end) timestamps
 # needs .txt file
 
-def get_timestamps(video_id):
+def get_timestamps(video_id, num = 20):
 
     time_series = [0]*100000
     time_sir = [0]*100000
@@ -78,7 +78,7 @@ def get_timestamps(video_id):
         time_list.append((t, int(signals[t])))
 
     time_list.sort(key=operator.itemgetter(1), reverse = True)
-    time_list = time_list[:20]
+    time_list = time_list[:num]
     time_list.sort(key=operator.itemgetter(0))
 
     url_list = []
@@ -87,10 +87,10 @@ def get_timestamps(video_id):
 
     # for i in url_list:
     #     print(i)
+    
     return url_list
 
 video_id = 392252903
-print(get_timestamps(video_id))
+num_clips = 25 # change as needed
 
-# print(time_list)
-# print("len: %d" %len(time_list))
+print(len(get_timestamps(video_id, num_clips)))
