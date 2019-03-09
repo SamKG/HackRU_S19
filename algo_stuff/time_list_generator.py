@@ -3,8 +3,13 @@ import operator
 import time
 import numpy as np
 import pylab
+import math
 
 test = float("inf")
+
+
+def convert(id,s):
+    return "https://www.twitch.tv/videos/"+str(id)+"/?t="+str(math.floor(s/3600))+"h"+str(math.floor((s%3600)/60))+"m"+str(s%60)+"s";
 
 def thresholding_algo(y, lag, threshold, influence):
     signals = np.zeros(len(y))
@@ -32,12 +37,13 @@ def thresholding_algo(y, lag, threshold, influence):
 
 time_series = [0]*100000
 time_sir = [0]*100000
+video_id = 392252903
 
 def running_mean(x, N):
    cumsum = np.cumsum(np.insert(x, 0, 0)) 
    return (cumsum[N:] - cumsum[:-N])
 
-with open("v392252903.txt","r") as stream:
+with open("v"+str(video_id)+".txt","r") as stream:
     for message in stream:
         seconds = int(time.mktime(time.strptime(message.split("]")[0][1:], "%H:%M:%S")) + 2208970800)
         time_series[seconds] += 1
@@ -78,3 +84,5 @@ time_list = time_list[:20]
 
 print(time_list)
 print("len: %d" %len(time_list))
+for i,j in time_list:
+    print(convert(video_id,i))
