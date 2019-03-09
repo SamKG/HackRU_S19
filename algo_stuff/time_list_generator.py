@@ -4,12 +4,14 @@ import time
 import numpy as np
 import pylab
 import math
+from random import *
 
 test = float("inf")
 
 
-def convert(id,s):
-    return "https://www.twitch.tv/videos/"+str(id)+"/?t="+str(math.floor(s/3600))+"h"+str(math.floor((s%3600)/60))+"m"+str(s%60)+"s";
+def convert(s):
+    # return "https://www.twitch.tv/videos/"+str(id)+"/?t="+str(math.floor(s/3600))+"h"+str(math.floor((s%3600)/60))+"m"+str(s%60)+"s";
+    return str(math.floor(s/3600))+"h"+str(math.floor((s%3600)/60))+"m"+str(s%60)+"s";
 
 def thresholding_algo(y, lag, threshold, influence):
     signals = np.zeros(len(y))
@@ -35,54 +37,60 @@ def thresholding_algo(y, lag, threshold, influence):
                 # avgFilter = np.asarray(avgFilter),
                 # stdFilter = np.asarray(stdFilter))
 
-time_series = [0]*100000
-time_sir = [0]*100000
-video_id = 392252903
-
 def running_mean(x, N):
    cumsum = np.cumsum(np.insert(x, 0, 0)) 
    return (cumsum[N:] - cumsum[:-N])
 
-with open("v"+str(video_id)+".txt","r") as stream:
-    for message in stream:
-        seconds = int(time.mktime(time.strptime(message.split("]")[0][1:], "%H:%M:%S")) + 2208970800)
-        time_series[seconds] += 1
+# returns a vector of pairs of (start, end) timestamps
+# needs .txt file
 
-for i in range(25000):
-    print('%d: %d' %(i, time_series[i]))
+def get_timestamps(video_id):
 
-# 14303
-d = 30;
-moving_avg = [0]*(100000-d)
-for i in range(d):
-    moving_avg[0] += time_series[i]
-for i in range(1,25000-d):
-    moving_avg[i] = moving_avg[i-1] + time_series[i+d-1] - time_series[i-1]
-for i in range(100000-d):
-    moving_avg[i] /= d
+    time_series = [0]*100000
+    time_sir = [0]*100000
 
+    with open("v"+str(video_id)+".txt","r") as stream:
+        for message in stream:
+            seconds = int(time.mktime(time.strptime(message.split("]")[0][1:], "%H:%M:%S")) + 2208970800)
+            time_series[seconds] += 1
 
-# plt.plot(moving_avg[10000:20000])
-# # plt.plot(time_series[240:440])
-# plt.ylabel('frequency')
-# plt.xlabel('time')
-# plt.show()
+    for i in range(25000):
+        print('%d: %d' %(i, time_series[i]))
 
-signals = thresholding_algo(time_series, 30, 4, 1)
-signal_list = []
-time_list = []
+    d = 30;
+    moving_avg = [0]*(100000-d)
+    for i in range(d):
+        moving_avg[0] += time_series[i]
+    for i in range(1,25000-d):
+        moving_avg[i] = moving_avg[i-1] + time_series[i+d-1] - time_series[i-1]
+    for i in range(100000-d):
+        moving_avg[i] /= d
 
-for i in range(100000):
-    if signals[i] != test and signals[i] > 0: 
-        signal_list.append(i)
+    signals = thresholding_algo(time_series, 30, 4, 1)
+    signal_list = []
+    time_list = []
 
-for t in signal_list:
-    time_list.append((t, int(signals[t])))
+    for i in range(100000):
+        if signals[i] != test and signals[i] > 0: 
+            signal_list.append(i)
 
-time_list.sort(key=operator.itemgetter(1), reverse = True)
-time_list = time_list[:20]
+    for t in signal_list:
+        time_list.append((t, int(signals[t])))
 
-print(time_list)
-print("len: %d" %len(time_list))
-for i,j in time_list:
-    print(convert(video_id,i))
+    time_list.sort(key=operator.itemgetter(1), reverse = True)
+    time_list = time_list[:20]
+    time_list.sort(key=operator.itemgetter(0))
+
+    url_list = []
+    for i,j in time_list:
+        url_list.append((convert(i), convert(i + 30 + randint(0, 5) )))
+
+    # for i in url_list:
+    #     print(i)
+    return url_list
+
+video_id = 392252903
+print(get_timestamps(video_id))
+
+# print(time_list)
+# print("len: %d" %len(time_list))
