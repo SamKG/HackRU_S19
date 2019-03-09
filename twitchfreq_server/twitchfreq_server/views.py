@@ -5,5 +5,5 @@ def index(request):
 
 def highlight(request,video_id = -1):
     if video_id == -1:
-        return JsonResponse({})
+        return JsonResponse({'values':[]})
     return JsonResponse({})

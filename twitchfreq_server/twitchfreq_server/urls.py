@@ -20,5 +20,5 @@ from . import views
 
 urlpatterns = [
     path('', views.index,name='index'),
-    path('videos/<int:video_id>/',views.highlight),
+    path('video/<int:video_id>/',views.highlight),
 ]
