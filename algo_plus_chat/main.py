@@ -6,12 +6,15 @@ import json
 
 
 def get_vid_data(video_id="377499328"):
+    
     chat_log = get_chat(video_id)
-
-    # for chat in chat_log:
-    # 	print(chat)
+    print("GOT CHAT LOG DATA")
+    for chat in chat_log:
+    	print(chat)
 
     timestamp_list = get_timestamps(chat_log)
+    print("GOT TIMESTAMP LIST")
+    print(timestamp_list)
     return timestamp_list
 
 if __name__ == '__main__':
