@@ -5,10 +5,10 @@ video_id = "391828640"
 
 chat_log = get_chat(video_id)
 
-for chat in chat_log:
-	print(chat)
+# for chat in chat_log:
+# 	print(chat)
 
 timestamp_list = get_timestamps(chat_log)
 
-# for i, j in timestamp_list:
-# 	print(("%s %s" %(i, j)))
+for i, j in timestamp_list:
+	print(("%s %s" %(i, j)))

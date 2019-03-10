@@ -78,10 +78,10 @@ def get_timestamps(stream, num = 20):
     time_list.sort(key=operator.itemgetter(0))
 
     url_list = []
-    for i,j in time_list:
-        url_list.append((convert(i), convert(i + 30 + randint(0, 5) )))
+    # for i,j in time_list:
+    #     url_list.append((convert(i), convert(i + 30 + randint(0, 5) )))
 
-    # for i in url_list:
-    #     print(i)
+    for i, j in time_list:
+        url_list.append((i, i + 30 + randint(0, 5)))
     
     return url_list
