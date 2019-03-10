@@ -41,21 +41,17 @@ def running_mean(x, N):
    cumsum = np.cumsum(np.insert(x, 0, 0)) 
    return (cumsum[N:] - cumsum[:-N])
 
-# returns a vector of pairs of (start, end) timestamps
-# needs .txt file
 
-def get_timestamps(video_id, num = 20):
+def get_timestamps(stream, num = 20):
 
     time_series = [0]*100000
-    time_sir = [0]*100000
+    
+    for message in stream:
+        seconds = int(time.mktime(time.strptime(message.split("]")[0][1:], "%H:%M:%S")) + 2208970800)
+        time_series[seconds] += 1
 
-    with open("v"+str(video_id)+".txt","r") as stream:
-        for message in stream:
-            seconds = int(time.mktime(time.strptime(message.split("]")[0][1:], "%H:%M:%S")) + 2208970800)
-            time_series[seconds] += 1
-
-    for i in range(25000):
-        print('%d: %d' %(i, time_series[i]))
+    # for i in range(25000):
+    #     print('%d: %d' %(i, time_series[i]))
 
     d = 30;
     moving_avg = [0]*(100000-d)
@@ -89,8 +85,3 @@ def get_timestamps(video_id, num = 20):
     #     print(i)
     
     return url_list
-
-video_id = 392252903
-num_clips = 25 # change as needed
-
-print(len(get_timestamps(video_id, num_clips)))
