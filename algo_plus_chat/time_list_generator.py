@@ -22,7 +22,8 @@ def thresholding_algo(y, lag, threshold, influence):
     stdFilter[lag - 1] = np.std(y[0:lag])
     for i in range(lag, len(y)):
         if abs(y[i] - avgFilter[i-1]) > threshold * stdFilter [i-1]:
-            signals[i] = (y[i] - avgFilter[i-1])/stdFilter[i-1]
+            if abs(stdFilter[i - 1] >= .0000001):
+                signals[i] = (y[i] - avgFilter[i-1])/stdFilter[i-1]
             filteredY[i] = influence * y[i] + (1 - influence) * filteredY[i-1]
             avgFilter[i] = np.mean(filteredY[(i-lag+1):i+1])
             stdFilter[i] = np.std(filteredY[(i-lag+1):i+1])
