@@ -70,8 +70,12 @@ def get_timestamps(stream, num = 20):
         if signals[i] != test and signals[i] > 0: 
             signal_list.append(i)
 
+    last_t = -40
+
     for t in signal_list:
-        time_list.append((t, int(signals[t])))
+        if t - last_t > d:
+            time_list.append((t, int(signals[t])))
+            last_t = t
 
     time_list.sort(key=operator.itemgetter(1), reverse = True)
     time_list = time_list[:num]
