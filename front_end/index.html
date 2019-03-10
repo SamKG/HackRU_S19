@@ -121,7 +121,6 @@
                     return cookieValue;
                 }
                 function startQuery() {
-                    
                         var csrftoken = getCookie('csrftoken');
                         $.ajax({
                           url: "/video/"+$("#vodurl").val()+'/',
@@ -130,11 +129,11 @@
                             csrftoken: csrftoken
                           },
                           dataType: "json",
-                          success: function(data) { console.log("RECV DATA")}
+                          success: function(data) { onCallBack($("#vodurl").val())}
                         });
                         $("#inpForm").hide();
                         $("#loading").show();
-                        setTimeout(function() { onCallBack(videoID, timestamps); }, 2000);
+                        //setTimeout(function() { onCallBack(videoID, timestamps); }, 2000);
                 };
 
 
