@@ -1,6 +1,6 @@
 <html>
         <head>
-                <title>Twitch Highlight Reel Generator</title>
+                <title>{{ CSRF_HEADER_NAME }}Twitch Highlight Reel Generator</title>
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
                 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
                 <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
@@ -103,8 +103,32 @@
                 var videoID = "392794181";
                 var timestamps = [120, 360, 420];
                 // onCallBack(videoID, timestamps);
+                function getCookie(name) {
+                    var cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        var cookies = document.cookie.split(';');
+                        for (var i = 0; i < cookies.length; i++) {
+                            var cookie = jQuery.trim(cookies[i]);
+                            // Does this cookie string begin with the name we want?
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
                 function startQuery() {
-                        $.post("/video/"+$("#vodurl").val()+'/', $("#vodurl").val(), function (data) {
+                    
+                        var csrftoken = getCookie('csrftoken');
+                        $.ajax({
+                          url: "/video/"+$("#vodurl").val()+'/',
+                          type: "POST",
+                          data: {
+                            csrftoken: csrftoken
+                          },
+                          dataType: "json",
+                          success: function(data) { console.log("RECV DATA")}
                         });
                         $("#inpForm").hide();
                         $("#loading").show();
