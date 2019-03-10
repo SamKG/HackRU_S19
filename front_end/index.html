@@ -52,7 +52,7 @@
         <script>
                 $("#loading").hide()
                 function startQuery() {
-                        $.post("/getTimestamps", $("#vodurl").val(), function (data) {
+                        $.post("/video/"+$("#vodurl").val()+'/', $("#vodurl").val(), function (data) {
                         })
                         $("#inpForm").hide()
                         $("#loading").show()

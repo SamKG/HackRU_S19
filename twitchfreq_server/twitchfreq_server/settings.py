@@ -50,11 +50,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'twitchfreq_server.urls'
-
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['%s/../../front_end/'% (PROJECT_DIR)],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
