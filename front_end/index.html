@@ -101,7 +101,9 @@
                 // $("#inpForm").hide();
                 $("#twitch").hide();
                 var videoID = "392794181";
-                var timestamps = [120, 360, 420];
+                var timestamps = [[100, 110], [360, 362], [560, 600]];
+                var player;
+                var clicked = 0;
                 // onCallBack(videoID, timestamps);
                 function getCookie(name) {
                     var cookieValue = null;
@@ -145,20 +147,65 @@
                           height: 300,
                           video: videoID,
                         };
-                        var player = new Twitch.Player("playa", options);
+                        var timeZero = -1; // initial time
+                        player = new Twitch.Player("playa", options);
                         timeArray.forEach(function(time) {
+                          if (timeZero == -1)
+                            timeZero = time[0];
+                          var timeStart = time[0];
+                          var timeEnd = time[1];
                           var b = document.createElement("button");
                           b.className += " btn btn-outline-primary";
                           b.style.marginRight = "10px";
+                          b.timeStart = timeStart;
+                          b.timeEnd = timeEnd;
                           var date = new Date(null);
-                          date.setSeconds(time); // specify value for SECONDS here
+                          date.setSeconds(timeStart); // specify value for SECONDS here
                           var result = date.toISOString().substr(11, 8);
                           b.innerHTML = result;
                           b.addEventListener("click", function() {
-                            player.seek(time);
+                            clicked = 1;
+                            player.seek(timeStart);
                           });
                           document.getElementById("timestamps").appendChild(b);
                         });
+
+                        // document.getElementById("timestamps").childNodes[0].click();
+
+                        player.setQuality(player.getQualities(4));
+
+                        //player.seek(document.getElementById("timestamps").childNodes[0].timeStart);
+
+                        //console.log(document.getElementById("timestamps").childNodes[0].timeStart);
+
+                        window.setInterval(runEverySec, 1000);
+                }
+
+                var lastButton = 0;
+
+                function runEverySec() {
+                  if (clicked == 1) {
+                    var cTime = player.getCurrentTime();
+                    var insideATime = 0;
+                    var count = 0;
+                    var childNodes = document.getElementById("timestamps").childNodes;
+                    for (var i = 0; i < childNodes.length; i++) {
+                        if (childNodes[i].timeStart < cTime && childNodes[i].timeEnd > cTime) {
+                          insideATime = 1;
+                          childNodes[i].className = "btn btn-raised btn-primary";
+                          lastButton = i;
+                        }
+                        if (!(childNodes[i].timeStart < cTime && childNodes[i].timeEnd > cTime)) {
+                          childNodes[i].className = "btn btn-outline-primary";
+                          count += 1;
+                        }
+                    };
+                    if (count == childNodes.length) {
+                      if (lastButton < lastButton.length - 1);
+                      console.log(lastButton + 1);
+                      player.seek(childNodes[lastButton + 1].timeStart);
+                    }
+                  }
                 }
         </script>
 </body>
