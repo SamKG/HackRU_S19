@@ -3,7 +3,7 @@ from chat_putter import get_chat
 from argparse import ArgumentParser
 
 def get_vid_data(video_id=377499328):
-    chat_log = get_chat(video_id)
+    chat_log = get_chat(str(video_id))
 
     # for chat in chat_log:
     # 	print(chat)
