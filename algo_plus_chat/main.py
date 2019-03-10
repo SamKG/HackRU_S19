@@ -24,14 +24,18 @@ if __name__ == '__main__':
     r = cur.fetchone()
     #print(r)
     if not r is None:
-        
+        for t in json.loads(r[0]):
+            t = str(t)
+            t = t.replace('[','(')
+            t = t.replace(']',')')
+            print(t)
     else:
         lis = get_vid_data(args.vidid)
         jstring = json.dumps(lis)
         #print(jstring,args.vidid)
         cur.execute('INSERT INTO cache (key,val) VALUES (\''+args.vidid+'\',\''+jstring+'\');')
         for t in lis:
-            print(t,'\n')
+            print(t)
 
     conn.commit()
     conn.close()
