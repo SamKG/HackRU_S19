@@ -1,0 +1,50 @@
+<html>
+        <head>
+                <title>Twitch Highlight Reel Generator</title>
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Materia
+l+Icons">
+                <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-m
+aterial-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossor
+igin="anonymous">
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53
+mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+                <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js
+" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></scr
+ipt>
+        </head>
+<body>
+        <nav class="navbar navbar-expand-lg">
+                <a class="navbar-brand" href="#">Logo</a>
+        </nav>
+        <main>
+                <div id="inpForm">
+                                <div class="container">
+                                        <h1 style="margin-top: 10%;margin-bottom: 100px;">Automatically mak
+e a Highlight Reel From a Twitch VOD</h1>
+                                        <div class="form-group">
+                                                <input type="url" placeholder="http://askdjalksd" id="vodur
+l" class="form-control">
+                                                <small class="form-text text-muted">VOD URL</small>
+                                        </div>
+                                        <button class="btn btn-lg" style="margin-top:200px; background: #64
+41A4; color: white; border-radius:0; width:200px; margin: auto; display:block;" onclick="startQuery();">Make Reel</
+button>
+                                </div>
+                </div>
+                <div id="loading">
+                        <h1 style="margin: auto;"><img src="load.png">Downloading and Processing Chat Log</
+h1>
+                </div>
+        </main>
+        <script>
+                $("#loading").hide()
+                function startQuery() {
+                        $.post("/getTimestamps", $("#vodurl").val(), function (data) {
+                        })
+                        $("#inpForm").hide()
+                        $("#loading").show()
+                }
+        </script>
+</body>
+</html>
