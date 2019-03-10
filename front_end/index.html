@@ -2,16 +2,25 @@
         <head>
                 <title>Twitch Highlight Reel Generator</title>
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+                <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
                 <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
                 <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
                 <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
                 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                <script src= "https://player.twitch.tv/js/embed/v1.js"></script>
+                <style>
+                @keyframes rotation {
+                from {
+                  transform: rotate(0deg);
+                }
+                to {
+                  transform: rotate(359deg);
+                }
+              }
+              </style>
         </head>
         <body>
-          <nav class="navbar navbar-expand-lg">
-            <a class="navbar-brand" href="#">Logo</a>
-          </nav>
           <main>
             <div id="inpForm">
               <div class="container">
@@ -19,7 +28,8 @@
                   <div class="col-sm-1">
                   </div>
                   <div class="col-sm-10" style="text-align: center;">
-                    <h4 style="margin-top: 10%; margin-bottom: 100px;">Automatically make a Highlight Reel From a Twitch VOD</h4>
+                    <img src="HighlightReel.png" style="max-height: 300px;">
+                    <h5 style="margin-bottom: 100px;">Programmatically generated highlights from <i class="fab fa-twitch"></i> streams.</h5>
                   </div>
                   <div class="col-sm-1">
                   </div>
@@ -29,7 +39,7 @@
                   </div>
                   <div class="col-sm-7">
                     <div class="form-group">
-                      <input type="url" placeholder="http://askdjalksd" id="vodurl" class="form-control">
+                      <input type="url" placeholder="392794181" id="vodurl" class="form-control">
                       <small class="form-text text-muted">VOD URL</small>
                     </div>
                   </div>
@@ -44,18 +54,87 @@
 
 
             <div id="loading">
-                    <h1 style="margin: auto;"><img src="load.png">Downloading and Processing Chat Log</h1>
+              <div class="container">
+                <div class="row">
+                  <div class="col-sm-1">
+                  </div>
+                  <div class="col-sm-10" style="text-align: center;">
+                    <img src="reelblue.png" style="max-height: 145px; margin-top: 55px; animation: rotation 2s infinite linear;">
+                    <h5 style="margin-top: 50px;">
+                      Downloading and Processing Chat Log
+                    </h5>
+                  </div>
+                  <div class="col-sm-1">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="twitch">
+              <div class="container">
+                <div class="row">
+                  <div class="col-sm-1">
+                  </div>
+                  <div class="col-sm-10" style="text-align: center;">
+                    <a href="/">
+                      <img src="text.png" style="margin: 50px 0;">
+                    </a>
+                    <div style="margin-bottom: 20px;"id="playa"></div>
+
+                    <div class="alert alert-success" role="alert">
+                      Success! The important sections of the video are given
+                      below.
+                    </div>
+
+                    <div id="timestamps"></div>
+                  </div>
+                  <div class="col-sm-1">
+                  </div>
+                </div>
+              </div>
             </div>
 
 
         </main>
         <script>
-                $("#loading").hide()
+                $("#loading").hide();
+                // $("#inpForm").hide();
+                $("#twitch").hide();
+                var videoID = "392794181";
+                var timestamps = [120, 360, 420];
+                // onCallBack(videoID, timestamps);
                 function startQuery() {
                         $.post("/video/"+$("#vodurl").val()+'/', $("#vodurl").val(), function (data) {
-                        })
-                        $("#inpForm").hide()
-                        $("#loading").show()
+                        });
+                        $("#inpForm").hide();
+                        $("#loading").show();
+                        setTimeout(function() { onCallBack(videoID, timestamps); }, 2000);
+                };
+
+
+
+                function onCallBack(videoID, timeArray) {
+                        $("#loading").hide();
+                        $("#twitch").show();
+                        var options = {
+                          width: 600,
+                          height: 300,
+                          video: videoID,
+                        };
+                        var player = new Twitch.Player("playa", options);
+                        timeArray.forEach(function(time) {
+                          var b = document.createElement("button");
+                          b.className += " btn btn-outline-primary";
+                          b.style.marginRight = "10px";
+                          var date = new Date(null);
+                          date.setSeconds(time); // specify value for SECONDS here
+                          var result = date.toISOString().substr(11, 8);
+                          b.innerHTML = result;
+                          b.addEventListener("click", function() {
+                            player.seek(time);
+                          });
+                          document.getElementById("timestamps").appendChild(b);
+                        });
                 }
         </script>
 </body>
